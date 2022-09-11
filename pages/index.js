@@ -1,46 +1,48 @@
-const CanvasLib = {
-  createEmptyCanvas: () => {
-    const a = [];
-    for (let i = 0; i < 16; i++) {
-      a.push([]);
-      for (let j = 0; j < 16; j++) a[i].push("#FFFFFF"); //white color
-    }
-    return a;
-  },
+import ColorPickerContainer from "../components/ColorPickerContainer";
+import Header from "../components/Header";
+import { PainterContext } from "../contexts/PainterContext";
+import { useState } from "react";
+import Canvas from "../components/Canvas";
+import CanvasLib from "../libs/CanvasLib";
 
-  copyCanvas: (source) => {
-    const a = [];
-    for (let i = 0; i < 16; i++) {
-      a.push([]);
-      for (let j = 0; j < 16; j++) a[i] = source[i];
-    }
-    return a;
-  },
+export default function Home() {
+  const [selColor, setSelColor] = useState("#000000");
 
-  createRandomCanvas: () => {
-    const colors = [
-      "#000000",
-      "#804000",
-      "#FE0000",
-      "#FE6A00",
-      "#FFD800",
-      "#00FF01",
-      "#FFFFFF",
-      "#01FFFF",
-      "#0094FE",
-      "#0026FF",
-      "#B100FE",
-      "#FF006E",
-    ];
+  //16x16 2D Array that holds color data
+  const [pixels, setPixels] = useState(CanvasLib.createEmptyCanvas());
 
-    const b = [];
-    for (let i = 0; i < 16; i++) {
-      b.push([]);
-      for (let j = 0; j < 16; j++)
-        b[i].push(colors[Math.floor(Math.random() * 12)]); //white color
-    }
-    return b;
-  },
-};
+  //will be called by Cell component
+  const paint = (xPos, yPos) => {
+    //copy from old 2d Array
+    const newPixels = CanvasLib.copyCanvas(pixels);
+    newPixels[xPos][yPos] = selColor;
+    setPixels(CanvasLib.copyCanvas(newPixels));
+  };
 
-export default CanvasLib;
+  const clear = () => {
+    setPixels(CanvasLib.createEmptyCanvas());
+  };
+
+  const random = () => {
+    setPixels(CanvasLib.createRandomCanvas);
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", backgroundColor: "GhostWhite" }}>
+      <PainterContext.Provider value={{ selColor, setSelColor, pixels, paint }}>
+        <Header />
+        <ColorPickerContainer />
+        <Canvas />
+
+        <div className="d-flex justify-content-center gap-2">
+          <button className="btn btn-dark" onClick={clear}>
+            Clear
+          </button>
+          <button className="btn btn-dark" onClick={random}>
+            Random Color
+          </button>
+        </div>
+      </PainterContext.Provider>
+    </div>
+  );
+}

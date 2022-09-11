@@ -14,14 +14,10 @@ export default function ColorPicker(props) {
         height: "50px",
         borderStyle: "solid",
 
-        
-
         borderColor: selColor === color ? "magenta" : "black",
         borderWidth: selColor === color ? "7px" : "2px",
       }}
       onClick={() => {
-        //set selecting color when clicked
-        //your code here
         setSelColor(color);
       }}
     />

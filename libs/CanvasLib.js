@@ -3,7 +3,7 @@ const CanvasLib = {
     const a = [];
     for (let i = 0; i < 16; i++) {
       a.push([]);
-      for (let j = 0; j < 16; j++) a[i].push("#FFFFFF"); //white color
+      for (let j = 0; j < 16; j++) a[i].push("#FFFFFF");
     }
     return a;
   },
@@ -32,14 +32,16 @@ const CanvasLib = {
       "#B100FE",
       "#FF006E",
     ];
+    const a = CanvasLib.createEmptyCanvas();
 
-    const b = [];
-    for (let i = 0; i < 16; i++) {
-      b.push([]);
-      for (let j = 0; j < 16; j++)
-        b[i].push(colors[Math.floor(Math.random() * 12)]); //white color
+    for (let row = 0; row < 16; row++) {
+      for (let col = 0; col < 16; col++) {
+        const rand = Math.floor(Math.random() * colors.length);
+        a[row][col] = colors[rand];
+      }
     }
-    return b;
+
+    return a;
   },
 };
 
